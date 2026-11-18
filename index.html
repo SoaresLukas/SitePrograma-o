@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubos Sonoros Abertos e Fechados | Física e Tecnologia</title>
+    
+    <!-- Google Fonts: Montserrat (Títulos) e Inter (Textos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hotpink: {
+                            DEFAULT: '#FF007F',
+                            dark: '#D6006B',
+                            light: '#FF4DA6',
+                            soft: '#FFE6F2',
+                        },
+                        pastelgreen: {
+                            DEFAULT: '#B2F2BB',
+                            medium: '#8CE99A',
+                            soft: '#EBFBEE',
+                            deep: '#1F6E32',
+                        },
+                        icewhite: '#FAFAFA',
+                        charcoal: '#1E1E24',
+                    },
+                    fontFamily: {
+                        heading: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'pastel': '0 20px 40px -15px rgba(178, 242, 187, 0.75)',
+                        'pink-glow': '0 12px 28px -6px rgba(255, 0, 127, 0.35)',
+                        'card': '0 10px 30px -10px rgba(30, 30, 36, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos Base e Tipografia */
+        body {
+            background-color: #FAFAFA;
+            color: #1E1E24;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Efeito Glassmorphism na Navbar */
+        .glass-nav {
+            background: rgba(250, 250, 250, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(178, 242, 187, 0.6);
+        }
+
+        /* Destaque Estilo Marca-Texto Verde Pastel nos Títulos */
+        .title-highlight {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+        .title-highlight::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            right: -4px;
+            bottom: 4px;
+            height: 36%;
+            background-color: #B2F2BB;
+            z-index: -1;
+            border-radius: 6px;
+            transition: height 0.3s ease;
+        }
+        .title-highlight:hover::after {
+            height: 55%;
+        }
+
+        /* Animações Suaves de Scroll (Reveal) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Micro-interações nos Cards */
+        .hover-card {
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 35px -12px rgba(255, 0, 127, 0.16);
+            border-color: #FF007F;
+        }
+
+        /* Zoom Suave nas Imagens */
+        .img-zoom-wrapper {
+            overflow: hidden;
+            border-radius: 16px;
+        }
+        .img-zoom-wrapper img {
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .img-zoom-wrapper:hover img {
+            transform: scale(1.06);
+        }
+
+        /* Estilização de Frações Matemáticas */
+        .math-frac {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-weight: 700;
+        }
+        .math-frac .num {
+            border-bottom: 2px solid currentColor;
+            padding: 0 4px 2px;
+            line-height: 1.1;
+        }
+        .math-frac .den {
+            padding: 2px 4px 0;
+            line-height: 1.1;
+        }
+
+        /* Scrollbar Personalizada */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAFAFA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B2F2BB;
+            border-radius: 9999px;
+            border: 2px solid #FAFAFA;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF007F;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-hotpink selection:text-white">
+
+    <!-- ==================== NAVBAR FIXA ==================== -->
+    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo / Título do Projeto -->
+                <a href="#inicio" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-2xl bg-hotpink flex items-center justify-center text-white shadow-pink-glow group-hover:scale-105 transition-transform">
+                        <!-- Ícone SVG Onda Sonora -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h2l2-5 4 10 4-14 3 12 2-3h1" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-lg sm:text-xl tracking-tight text-charcoal block leading-none">
+                            Tubos <span class="text-hotpink">Sonoros</span>
+                        </span>
+                        <span class="text-xs font-medium text-pastelgreen-deep bg-pastelgreen-soft px-2 py-0.5 rounded-full inline-block mt-1">
+                            Física &amp; Tecnologia • 2º D
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Links Desktop -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <a href="#introducao" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-charcoal hover:text-hotpink hover:bg-hotpink-soft/50 transition-colors">Introdução</a>
+                    <a href="#simulador" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-charcoal hover:text-hotpink hover:bg-hotpink-soft/50 transition-colors">Ondas &amp; Simulador</a>
+                    <a href="#comparativo" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-charcoal hover:text-hotpink hover:bg-hotpink-soft/50 transition-colors">Aberto vs. Fechado</a>
+                    <a href="#aplicacoes" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-charcoal hover:text-hotpink hover:bg-hotpink-soft/50 transition-colors">Aplicações</a>
+                    <a href="#exercicio" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-charcoal hover:text-hotpink hover:bg-hotpink-soft/50 transition-colors">Exercício</a>
+                    <a href="#conclusao" class="ml-2 px-4 py-2.5 rounded-xl text-sm font-bold bg-pastelgreen text-pastelgreen-deep hover:bg-hotpink hover:text-white transition-all shadow-sm">Equipe &amp; Conclusão</a>
+                </div>
+
+                <!-- Botão Menu Mobile -->
+                <button id="mobileMenuBtn" aria-label="Abrir Menu" class="lg:hidden p-2.5 rounded-xl bg-pastelgreen-soft text-charcoal hover:bg-hotpink hover:text-white transition-colors">
+                    <svg id="menuIconOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg id="menuIconClose" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Gaveta Menu Mobile -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-pastelgreen px-4 pt-2 pb-5 space-y-1.5 shadow-lg">
+            <a href="#introducao" class="mobile-link block px-4 py-3 rounded-xl text-base font-semibold text-charcoal hover:bg-pastelgreen-soft hover:text-hotpink">Introdução &amp; Conceitos</a>
+            <a href="#simulador" class="mobile-link block px-4 py-3 rounded-xl text-base font-semibold text-charcoal hover:bg-pastelgreen-soft hover:text-hotpink">Ondas Estacionárias &amp; Simulador</a>
+            <a href="#comparativo" class="mobile-link block px-4 py-3 rounded-xl text-base font-semibold text-charcoal hover:bg-pastelgreen-soft hover:text-hotpink">Tubos Abertos vs. Fechados</a>
+            <a href="#aplicacoes" class="mobile-link block px-4 py-3 rounded-xl text-base font-semibold text-charcoal hover:bg-pastelgreen-soft hover:text-hotpink">Instrumentos &amp; Dia a Dia</a>
+            <a href="#exercicio" class="mobile-link block px-4 py-3 rounded-xl text-base font-semibold text-charcoal hover:bg-pastelgreen-soft hover:text-hotpink">Exercício Resolvido</a>
+            <a href="#conclusao" class="mobile-link block px-4 py-3 rounded-xl text-base font-bold bg-hotpink text-white text-center mt-2">Conclusão &amp; Equipe</a>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <header id="inicio" class="relative pt-28 pb-16 sm:pt-36 sm:pb-24 overflow-hidden">
+        <!-- Elementos Decorativos de Fundo -->
+        <div class="absolute top-24 -left-24 w-80 h-80 bg-pastelgreen/40 rounded-full blur-3xl -z-10"></div>
+        <div class="absolute bottom-10 -right-24 w-96 h-96 bg-hotpink/10 rounded-full blur-3xl -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Coluna de Texto -->
+                <div class="lg:col-span-7 space-y-6 reveal">
+                    <div class="inline-flex flex-wrap items-center gap-2 px-4 py-2 rounded-full bg-pastelgreen-soft border border-pastelgreen text-pastelgreen-deep text-xs sm:text-sm font-bold">
+                        <span class="w-2.5 h-2.5 rounded-full bg-hotpink animate-pulse"></span>
+                        Colégio CCM Erico Verissimo • Turma 2º Ano D
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal leading-tight tracking-tight">
+                        Estudo dos <span class="text-hotpink">Tubos Sonoros</span> <span class="title-highlight">Abertos e Fechados</span>
+                    </h1>
+
+                    <p class="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl">
+                        Descubra como as <strong class="text-charcoal font-semibold">ondas estacionárias</strong> funcionam dentro dos instrumentos de sopro, na nossa voz e em diversas tecnologias do nosso dia a dia.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <a href="#introducao" class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-hotpink hover:bg-hotpink-dark text-white font-heading font-bold text-base shadow-pink-glow hover:scale-[1.03] active:scale-[0.99] transition-all">
+                            Explorar Conteúdo
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </a>
+
+                        <a href="#simulador" class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-pastelgreen hover:bg-pastelgreen-medium text-pastelgreen-deep font-heading font-bold text-base transition-all">
+                            <svg class="w-5 h-5 text-hotpink" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            Simulador de Ondas
+                        </a>
+                    </div>
+
+                    <!-- Mini Métricas Rápidas do Documento -->
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-gray-200/80 max-w-lg">
+                        <div>
+                            <span class="block font-heading font-extrabold text-2xl sm:text-3xl text-hotpink">340 m/s</span>
+                            <span class="text-xs sm:text-sm text-gray-500 font-medium">Velocidade do som (20°C)</span>
+                        </div>
+                        <div>
+                            <span class="block font-heading font-extrabold text-2xl sm:text-3xl text-pastelgreen-deep">v = λ · f</span>
+                            <span class="text-xs sm:text-sm text-gray-500 font-medium">Equação fundamental</span>
+                        </div>
+                        <div>
+                            <span class="block font-heading font-extrabold text-2xl sm:text-3xl text-charcoal">2 Tipos</span>
+                            <span class="text-xs sm:text-sm text-gray-500 font-medium">Abertos e Fechados</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna de Imagem em Destaque -->
+                <div class="lg:col-span-5 reveal">
+                    <div class="relative">
+                        <!-- Moldura Decorativa Verde Pastel -->
+                        <div class="absolute -inset-3 bg-pastelgreen rounded-3xl rotate-2 -z-10"></div>
+                        <div class="img-zoom-wrapper shadow-pastel bg-white border-4 border-white">
+                            <img 
+                                src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80" 
+                                alt="Instrumentos musicais de sopro ilustrando tubos sonoros" 
+                                class="w-full h-80 sm:h-96 object-cover"
+                                onerror="this.onerror=null;this.src='https://placehold.co/800x600/B2F2BB/1E1E24?text=Tubos+Sonoros+%26+Acustica';"
+                            >
+                        </div>
+
+                        <!-- Card Flutuante sobre a Imagem -->
+                        <div class="mt-4 sm:mt-0 sm:absolute sm:-bottom-6 sm:-left-6 bg-white p-4 rounded-2xl shadow-xl border-2 border-pastelgreen flex items-center gap-3.5 max-w-xs">
+                            <div class="w-12 h-12 rounded-xl bg-hotpink-soft text-hotpink flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-wider text-hotpink">Acústica Física</p>
+                                <p class="text-sm font-semibold text-charcoal">Colunas de ar vibrando em ressonância</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== SEÇÃO 1: VISÃO GERAL & CONCEITOS FUNDAMENTAIS ==================== -->
+    <section id="introducao" class="py-20 bg-pastelgreen-soft/60 border-y border-pastelgreen/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Cabeçalho da Seção -->
+            <div class="max-w-3xl mx-auto text-center mb-16 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-white text-hotpink font-bold text-xs uppercase tracking-widest shadow-sm mb-3">
+                    01 • Introdução e Fundamentos
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-charcoal mb-4">
+                    O que é um <span class="title-highlight">Tubo Sonoro</span>?
+                </h2>
+                <p class="text-gray-600 text-base sm:text-lg leading-relaxed">
+                    A física está presente em praticamente tudo o que fazemos. Nos instrumentos de sopro, o som nasce dentro de colunas de ar que vibram de maneira organizada.
+                </p>
+            </div>
+
+            <!-- Grid Contextualização + Imagem -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-16">
+                <div class="lg:col-span-6 reveal">
+                    <div class="img-zoom-wrapper shadow-card border-4 border-white">
+                        <img 
+                            src="https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=900&q=80" 
+                            alt="Partitura musical e ondas acústicas" 
+                            class="w-full h-72 sm:h-80 object-cover"
+                            onerror="this.onerror=null;this.src='https://placehold.co/800x500/FF007F/FFFFFF?text=Ondas+Sonoras+%26+Embocadura';"
+                        >
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 space-y-5 reveal">
+                    <div class="bg-white p-7 rounded-2xl shadow-card border border-pastelgreen">
+                        <h3 class="text-xl font-bold text-charcoal mb-3 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-hotpink text-white flex items-center justify-center text-sm font-extrabold">1</span>
+                            Coluna de Ar e Superposição
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Um <strong class="text-charcoal">tubo sonoro</strong> é basicamente uma coluna de ar onde são produzidas <span class="text-hotpink font-semibold">ondas estacionárias longitudinais</span>. Elas surgem pela superposição das ondas de pressão geradas em uma extremidade com as ondas refletidas na outra extremidade.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-7 rounded-2xl shadow-card border border-pastelgreen">
+                        <h3 class="text-xl font-bold text-charcoal mb-3 flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-pastelgreen text-pastelgreen-deep flex items-center justify-center text-sm font-extrabold">2</span>
+                            O Papel da Embocadura
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            As ondas de pressão ocorrem graças a um dispositivo chamado <strong class="text-charcoal">embocadura</strong>. O jato de ar que entra no tubo é dirigido contra a embocadura, se afunila e determina a vibração inicial que dá origem às ondas musicais.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards dos 4 Conceitos Fundamentais + Fórmula -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <!-- Card 1: Onda Sonora -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-transparent hover-card shadow-card reveal">
+                    <div class="w-12 h-12 rounded-2xl bg-hotpink-soft text-hotpink flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-lg text-charcoal mb-2">Onda Sonora</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        É uma onda <strong>mecânica e longitudinal</strong>: precisa de um meio material (como o ar) e faz as moléculas oscilarem na mesma direção em que o som caminha.
+                    </p>
+                </div>
+
+                <!-- Card 2: Frequência -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-transparent hover-card shadow-card reveal">
+                    <div class="w-12 h-12 rounded-2xl bg-pastelgreen-soft text-pastelgreen-deep flex items-center justify-center mb-4 font-heading font-extrabold text-xl">
+                        f
+                    </div>
+                    <h4 class="font-bold text-lg text-charcoal mb-2">Frequência (f)</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Quantidade de ondas formadas por segundo (medida em <strong>Hertz, Hz</strong>). Define a <strong>altura da nota</strong>: frequências altas geram sons agudos; baixas geram sons graves.
+                    </p>
+                </div>
+
+                <!-- Card 3: Comprimento de Onda -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-transparent hover-card shadow-card reveal">
+                    <div class="w-12 h-12 rounded-2xl bg-hotpink-soft text-hotpink flex items-center justify-center mb-4 font-heading font-extrabold text-xl">
+                        λ
+                    </div>
+                    <h4 class="font-bold text-lg text-charcoal mb-2">Comprimento de Onda (λ)</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        É o tamanho de uma onda completa, ou seja, a distância espacial entre duas cristas ou duas compressões consecutivas das moléculas de ar.
+                    </p>
+                </div>
+
+                <!-- Card 4: Velocidade do Som -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-transparent hover-card shadow-card reveal">
+                    <div class="w-12 h-12 rounded-2xl bg-pastelgreen-soft text-pastelgreen-deep flex items-center justify-center mb-4 font-heading font-extrabold text-xl">
+                        v
+                    </div>
+                    <h4 class="font-bold text-lg text-charcoal mb-2">Velocidade do Som (v)</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        A rapidez com que o som se desloca no meio. No ar, em temperatura ambiente (cerca de <strong>20 °C</strong>), vale aproximadamente <strong>340 m/s</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Banner da Fórmula Fundamental -->
+            <div class="bg-charcoal text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl reveal">
+                <div class="space-y-1 text-center md:text-left">
+                    <span class="text-xs font-bold uppercase tracking-widest text-pastelgreen">Relação Matemática Essencial</span>
+                    <h3 class="text-2xl font-extrabold">Fórmula Fundamental da Ondulatória</h3>
+                    <p class="text-gray-300 text-sm">Relaciona a velocidade de propagação com o comprimento de onda e a frequência.</p>
+                </div>
+                <div class="px-8 py-4 rounded-2xl bg-hotpink text-white font-heading font-black text-3xl sm:text-4xl tracking-wider shadow-pink-glow">
+                    v = λ · f
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SEÇÃO 2: ONDAS ESTACIONÁRIAS & SIMULADOR INTERATIVO ==================== -->
+    <section id="simulador" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-14 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-hotpink-soft text-hotpink font-bold text-xs uppercase tracking-widest mb-3">
+                    02 • Interferência e Ressonância
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-charcoal mb-4">
+                    Como se Formam as <span class="title-highlight">Ondas Estacionárias</span>
+                </h2>
+                <p class="text-gray-600 text-base sm:text-lg leading-relaxed">
+                    Quando sopramos na ponta de um tubo, a onda viaja até o outro lado, reflete e volta. O encontro da onda que vai com a que volta cria pontos fixos de vibração: <strong>Nós</strong> e <strong>Ventres</strong>.
+                </p>
+            </div>
+
+            <!-- Cards Explicativos: Nó vs Ventre -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
+                <!-- Nó (Nodo) -->
+                <div class="bg-white p-8 rounded-3xl border-2 border-hotpink/30 shadow-card hover-card reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3.5 py-1 rounded-full bg-hotpink text-white text-xs font-bold uppercase">Interferência Destrutiva</span>
+                        <span class="w-4 h-4 rounded-full bg-hotpink ring-4 ring-hotpink-soft"></span>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-charcoal mb-3">Nó (ou Nodo)</h3>
+                    <p class="text-gray-600 leading-relaxed mb-4">
+                        É o ponto onde as duas ondas se anulam. Nesse local, as moléculas de ar praticamente <strong>não se mexem</strong>, ou seja, a amplitude de vibração do ar é <strong>zero</strong>.
+                    </p>
+                    <div class="p-3.5 rounded-xl bg-hotpink-soft/70 text-sm font-semibold text-hotpink-dark">
+                        Regra física: Toda extremidade <u>fechada</u> obrigatoriamente forma um <strong>Nó</strong> no fundo!
+                    </div>
+                </div>
+
+                <!-- Ventre (Antinó) -->
+                <div class="bg-white p-8 rounded-3xl border-2 border-pastelgreen shadow-card hover-card reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3.5 py-1 rounded-full bg-pastelgreen text-pastelgreen-deep text-xs font-bold uppercase">Interferência Construtiva</span>
+                        <span class="w-4 h-4 rounded-full bg-pastelgreen-deep ring-4 ring-pastelgreen-soft"></span>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-charcoal mb-3">Ventre (ou Antinó)</h3>
+                    <p class="text-gray-600 leading-relaxed mb-4">
+                        É o ponto onde as duas ondas se somam. Aqui as moléculas de ar oscilam livremente com a <strong>força e amplitude máximas</strong> possíveis.
+                    </p>
+                    <div class="p-3.5 rounded-xl bg-pastelgreen-soft text-sm font-semibold text-pastelgreen-deep">
+                        Regra física: Toda extremidade <u>aberta</u> obrigatoriamente forma um <strong>Ventre</strong> na saída!
+                    </div>
+                </div>
+            </div>
+
+            <!-- LABORATÓRIO INTERATIVO DE ONDAS ESTACIONÁRIAS -->
+            <div class="bg-white rounded-3xl border-2 border-pastelgreen p-6 sm:p-10 shadow-pastel reveal">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-gray-100">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-hotpink">
+                            <span class="w-2 h-2 rounded-full bg-hotpink animate-ping"></span>
+                            Laboratório Interativo
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-charcoal mt-1">
+                            Simulador Visual &amp; Sonoro de Harmônicos
+                        </h3>
+                    </div>
+                    <p class="text-sm text-gray-500 max-w-md">
+                        Alterne o tipo de tubo, escolha o harmônico (<code class="font-bold text-hotpink">n</code>) e veja como os nós e ventres se comportam dentro da coluna de ar!
+                    </p>
+                </div>
+
+                <!-- Controles do Simulador -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-6">
+                    <!-- 1. Tipo de Tubo -->
+                    <div class="bg-icewhite p-4 rounded-2xl border border-gray-200/80">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">1. Tipo de Tubo Sonoro</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="btnOpenTube" type="button" class="py-2.5 px-3 rounded-xl font-heading font-bold text-sm bg-hotpink text-white shadow-pink-glow transition-all">
+                                Tubo Aberto
+                            </button>
+                            <button id="btnClosedTube" type="button" class="py-2.5 px-3 rounded-xl font-heading font-bold text-sm bg-white text-charcoal border border-gray-200 hover:border-hotpink transition-all">
+                                Tubo Fechado
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Harmônico (n) -->
+                    <div class="bg-icewhite p-4 rounded-2xl border border-gray-200/80">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">
+                            2. Harmônico (n) <span id="harmonicRuleHint" class="text-hotpink lowercase font-semibold ml-1">(todos: 1, 2, 3, 4, 5)</span>
+                        </label>
+                        <div id="harmonicButtons" class="flex items-center gap-2">
+                            <button data-n="1" class="harm-btn flex-1 py-2.5 rounded-xl font-heading font-extrabold text-sm bg-pastelgreen text-pastelgreen-deep ring-2 ring-pastelgreen-deep">1º</button>
+                            <button data-n="2" class="harm-btn flex-1 py-2.5 rounded-xl font-heading font-extrabold text-sm bg-white text-charcoal border border-gray-200">2º</button>
+                            <button data-n="3" class="harm-btn flex-1 py-2.5 rounded-xl font-heading font-extrabold text-sm bg-white text-charcoal border border-gray-200">3º</button>
+                            <button data-n="4" class="harm-btn flex-1 py-2.5 rounded-xl font-heading font-extrabold text-sm bg-white text-charcoal border border-gray-200">4º</button>
+                            <button data-n="5" class="harm-btn flex-1 py-2.5 rounded-xl font-heading font-extrabold text-sm bg-white text-charcoal border border-gray-200">5º</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Comprimento do Tubo (L) -->
+                    <div class="bg-icewhite p-4 rounded-2xl border border-gray-200/80">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="tubeLengthSlider" class="text-xs font-bold uppercase tracking-wider text-gray-500">3. Comprimento (L)</label>
+                            <span id="tubeLengthValue" class="text-sm font-extrabold text-hotpink bg-hotpink-soft px-2.5 py-0.5 rounded-lg">0,50 m</span>
+                        </div>
+                        <input id="tubeLengthSlider" type="range" min="0.20" max="1.00" step="0.02" value="0.50" class="w-full accent-hotpink cursor-pointer h-2 bg-pastelgreen rounded-lg">
+                        <div class="flex justify-between text-[11px] text-gray-400 font-medium mt-1">
+                            <span>0,20 m (Agudo)</span>
+                            <span>1,00 m (Grave)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas da Onda Estacionária -->
+                <div class="relative rounded-2xl bg-charcoal p-4 sm:p-6 overflow-hidden">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs">
+                        <div class="flex items-center gap-4">
+                            <span class="inline-flex items-center gap-1.5 text-white font-semibold">
+                                <span class="w-3 h-3 rounded-full bg-hotpink inline-block"></span> Nó (Vibração Zero)
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 text-white font-semibold">
+                                <span class="w-3 h-3 rounded-full bg-pastelgreen inline-block"></span> Ventre (Vibração Máxima)
+                            </span>
+                        </div>
+                        <span id="tubeEndLabels" class="text-pastelgreen font-bold">
+                            Ponta Esquerda: Aberta (Ventre) | Ponta Direita: Aberta (Ventre)
+                        </span>
+                    </div>
+
+                    <div class="w-full h-56 sm:h-64">
+                        <canvas id="waveCanvas" class="w-full h-full block rounded-xl"></canvas>
+                    </div>
+                </div>
+
+                <!-- Resultados Calculados em Tempo Real + Botão de Áudio -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 items-center">
+                    <div class="p-4 rounded-2xl bg-pastelgreen-soft border border-pastelgreen">
+                        <span class="text-xs font-bold text-pastelgreen-deep uppercase block">Comprimento de Onda (λ)</span>
+                        <span id="calcLambda" class="font-heading font-extrabold text-2xl text-charcoal">1,00 m</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-hotpink-soft border border-hotpink/30">
+                        <span class="text-xs font-bold text-hotpink uppercase block">Frequência Emitida (f)</span>
+                        <span id="calcFreq" class="font-heading font-extrabold text-2xl text-charcoal">340,0 Hz</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-icewhite border border-gray-200">
+                        <span class="text-xs font-bold text-gray-500 uppercase block">Configuração Interna</span>
+                        <span id="calcNodesAntinodes" class="font-heading font-bold text-base text-charcoal">1 Nó e 2 Ventres</span>
+                    </div>
+                    <div>
+                        <button id="playToneBtn" type="button" class="w-full py-4 px-5 rounded-2xl bg-hotpink hover:bg-hotpink-dark text-white font-heading font-bold text-sm shadow-pink-glow flex items-center justify-center gap-2 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                            </svg>
+                            <span id="playToneText">Ouvir Nota (1,5s)</span>
+                        </button>
+                    </div>
+                </div>
+                <p id="audioFeedbackMsg" class="hidden text-xs text-center text-pastelgreen-deep font-semibold mt-3"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SEÇÃO 3: TUBOS ABERTOS VS FECHADOS & TABELA RESUMO ==================== -->
+    <section id="comparativo" class="py-20 bg-pastelgreen-soft/50 border-y border-pastelgreen/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-16 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-white text-hotpink font-bold text-xs uppercase tracking-widest shadow-sm mb-3">
+                    03 • Equações e Comportamento Acústico
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-charcoal mb-4">
+                    Tubos <span class="text-hotpink">Abertos</span> vs. Tubos <span class="title-highlight">Fechados</span>
+                </h2>
+                <p class="text-gray-600 text-base sm:text-lg leading-relaxed">
+                    O simples fato de uma extremidade estar aberta ou tampada muda completamente as fórmulas, os harmônicos permitidos e a altura do som produzido.
+                </p>
+            </div>
+
+            <!-- Cards Detalhados Lado a Lado -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-14">
+                <!-- Coluna Tubos Abertos -->
+                <div class="bg-white rounded-3xl p-8 shadow-card border-t-8 border-hotpink reveal">
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="px-4 py-1.5 rounded-full bg-hotpink-soft text-hotpink font-extrabold text-xs uppercase">Duas Pontas Abertas</span>
+                        <span class="font-heading font-black text-hotpink text-lg">n = 1, 2, 3, 4, 5...</span>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-charcoal mb-4">Tubos Sonoros Abertos</h3>
+                    <p class="text-gray-600 leading-relaxed mb-5">
+                        Têm as duas extremidades abertas para o ar, formando obrigatoriamente um <strong>ventre em cada ponta</strong>. No modo mais simples (<strong>1º harmônico</strong> ou frequência fundamental), há um nó no meio e meio ventre em cada ponta, cabendo exatamente metade de um comprimento de onda (<span class="font-semibold text-charcoal">L = λ / 2</span>).
+                    </p>
+
+                    <!-- Caixa de Fórmulas Tubo Aberto -->
+                    <div class="bg-icewhite rounded-2xl p-5 border border-gray-200 space-y-4 mb-5">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-3">
+                            <span class="text-sm font-bold text-gray-600">Comprimento de Onda:</span>
+                            <div class="font-heading font-extrabold text-lg text-charcoal">
+                                L = n · <span class="math-frac"><span class="num">λ</span><span class="den">2</span></span> &nbsp;⇒&nbsp; λ = <span class="math-frac"><span class="num">2L</span><span class="den">n</span></span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-sm font-bold text-hotpink">Frequência do Harmônico:</span>
+                            <div class="font-heading font-extrabold text-xl text-hotpink">
+                                f<sub>n</sub> = n · <span class="math-frac"><span class="num">v</span><span class="den">2L</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-pastelgreen-soft text-pastelgreen-deep text-sm font-semibold">
+                        <strong>O que isso significa?</strong> Os tubos abertos conseguem emitir <strong>todos os harmônicos</strong>, tanto os números pares quanto os ímpares (1º, 2º, 3º, 4º...).
+                    </div>
+                </div>
+
+                <!-- Coluna Tubos Fechados -->
+                <div class="bg-white rounded-3xl p-8 shadow-card border-t-8 border-pastelgreen-deep reveal">
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="px-4 py-1.5 rounded-full bg-pastelgreen text-pastelgreen-deep font-extrabold text-xs uppercase">Uma Aberta e Uma Tampada</span>
+                        <span class="font-heading font-black text-pastelgreen-deep text-lg">n = 1, 3, 5, 7...</span>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-charcoal mb-4">Tubos Sonoros Fechados</h3>
+                    <p class="text-gray-600 leading-relaxed mb-5">
+                        Possuem uma ponta aberta (<strong>ventre</strong>) e a outra fechada (<strong>nó no fundo</strong>). No <strong>1º harmônico</strong>, o tubo guarda a distância entre um nó e um ventre consecutivos, equivalendo a apenas um quarto do comprimento de onda (<span class="font-semibold text-charcoal">L = λ / 4</span>).
+                    </p>
+
+                    <!-- Caixa de Fórmulas Tubo Fechado -->
+                    <div class="bg-icewhite rounded-2xl p-5 border border-gray-200 space-y-4 mb-5">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-3">
+                            <span class="text-sm font-bold text-gray-600">Comprimento de Onda:</span>
+                            <div class="font-heading font-extrabold text-lg text-charcoal">
+                                L = n · <span class="math-frac"><span class="num">λ</span><span class="den">4</span></span> &nbsp;⇒&nbsp; λ = <span class="math-frac"><span class="num">4L</span><span class="den">n</span></span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-sm font-bold text-pastelgreen-deep">Frequência (n ímpar):</span>
+                            <div class="font-heading font-extrabold text-xl text-pastelgreen-deep">
+                                f<sub>n</sub> = n · <span class="math-frac"><span class="num">v</span><span class="den">4L</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-hotpink-soft text-hotpink-dark text-sm font-semibold">
+                        <strong>O que isso significa?</strong> Emitem <strong>apenas harmônicos ímpares</strong>. Para o mesmo tamanho L, o tubo fechado produz um som bem mais grave (<strong>metade da frequência</strong> do aberto).
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELA RESUMO COMPARATIVA -->
+            <div class="bg-white rounded-3xl shadow-card border border-pastelgreen overflow-hidden reveal">
+                <div class="px-6 py-5 bg-charcoal text-white flex items-center justify-between">
+                    <h3 class="font-heading font-extrabold text-lg sm:text-xl">Tabela Resumo Comparativa</h3>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-hotpink text-white">Guia Rápido de Estudo</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-pastelgreen-soft text-charcoal font-heading text-sm uppercase tracking-wider border-b border-pastelgreen">
+                                <th class="py-4 px-6 font-extrabold">O que muda?</th>
+                                <th class="py-4 px-6 font-extrabold text-hotpink">Tubo Aberto</th>
+                                <th class="py-4 px-6 font-extrabold text-pastelgreen-deep">Tubo Fechado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-sm sm:text-base">
+                            <tr class="hover:bg-icewhite transition-colors">
+                                <td class="py-4 px-6 font-bold text-charcoal">Pontas</td>
+                                <td class="py-4 px-6 text-gray-700">Abertas dos dois lados</td>
+                                <td class="py-4 px-6 text-gray-700">Uma aberta e uma fechada</td>
+                            </tr>
+                            <tr class="hover:bg-icewhite transition-colors">
+                                <td class="py-4 px-6 font-bold text-charcoal">Como fica o ar nas pontas</td>
+                                <td class="py-4 px-6 text-gray-700"><strong>Ventre</strong> nas duas pontas</td>
+                                <td class="py-4 px-6 text-gray-700"><strong>Ventre</strong> na ponta aberta e <strong>Nó</strong> no fundo</td>
+                            </tr>
+                            <tr class="hover:bg-icewhite transition-colors">
+                                <td class="py-4 px-6 font-bold text-charcoal">Fórmula da Frequência</td>
+                                <td class="py-4 px-6 font-heading font-bold text-hotpink">f = n · v / (2L)</td>
+                                <td class="py-4 px-6 font-heading font-bold text-pastelgreen-deep">f = n · v / (4L)</td>
+                            </tr>
+                            <tr class="hover:bg-icewhite transition-colors">
+                                <td class="py-4 px-6 font-bold text-charcoal">Harmônicos que produz</td>
+                                <td class="py-4 px-6 text-gray-700"><span class="px-2.5 py-1 rounded-lg bg-hotpink-soft text-hotpink font-bold text-xs">Todos (1, 2, 3, 4, 5...)</span></td>
+                                <td class="py-4 px-6 text-gray-700"><span class="px-2.5 py-1 rounded-lg bg-pastelgreen text-pastelgreen-deep font-bold text-xs">Apenas Ímpares (1, 3, 5, 7...)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SEÇÃO 4: APLICAÇÕES NOS INSTRUMENTOS E NO DIA A DIA ==================== -->
+    <section id="aplicacoes" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-10 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-pastelgreen-soft text-pastelgreen-deep font-bold text-xs uppercase tracking-widest mb-3">
+                    04 • Música, Tecnologia e Cotidiano
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-charcoal mb-4">
+                    Onde Encontramos na <span class="title-highlight">Prática</span>?
+                </h2>
+                <p class="text-gray-600 text-base sm:text-lg leading-relaxed">
+                    Desde a construção artesanal feita pelos <em>luthiers</em> até a engenharia automotiva, a medicina e a própria anatomia humana.
+                </p>
+            </div>
+
+            <!-- Filtros Interativos de Categoria -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12 reveal">
+                <button data-filter="all" class="app-filter-btn px-5 py-2.5 rounded-full font-heading font-bold text-sm bg-hotpink text-white shadow-pink-glow transition-all">
+                    Todas as Aplicações (7)
+                </button>
+                <button data-filter="instrumentos" class="app-filter-btn px-5 py-2.5 rounded-full font-heading font-bold text-sm bg-pastelgreen-soft text-pastelgreen-deep hover:bg-pastelgreen transition-all">
+                    Instrumentos de Sopro (3)
+                </button>
+                <button data-filter="cotidiano" class="app-filter-btn px-5 py-2.5 rounded-full font-heading font-bold text-sm bg-pastelgreen-soft text-pastelgreen-deep hover:bg-pastelgreen transition-all">
+                    Dia a Dia &amp; Curiosidades (4)
+                </button>
+            </div>
+
+            <!-- Grid de Cards de Aplicações -->
+            <div id="applicationsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 1. Flauta Doce e Transversal -->
+                <article data-category="instrumentos" class="app-card bg-white rounded-3xl overflow-hidden shadow-card border border-gray-100 hover-card flex flex-col reveal">
+                    <div class="img-zoom-wrapper rounded-none h-48 relative">
+                        <img 
+                            src="https://images.unsplash.com/photo-1514119412350-e174d90d280e?auto=format&fit=crop&w=700&q=80" 
+                            alt="Flauta transversal" 
+                            class="w-full h-full object-cover"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/FF007F/FFFFFF?text=Flauta+Transversal';"
+                        >
+                        <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-hotpink text-white text-xs font-bold shadow">Tubo Aberto</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <span class="text-xs font-bold uppercase tracking-wider text-pastelgreen-deep mb-1">Instrumento de Sopro</span>
+                        <h3 class="text-xl font-extrabold text-charcoal mb-3">Flauta Doce e Transversal</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed flex-1">
+                            Ao soprar no bocal, o ar vibra na borda. Quando o músico destampa um furo ao longo do corpo da flauta, o ar sai por ali, <strong>encurtando o comprimento L</strong> do tubo. Quanto menor o tamanho L, mais agudo é o som!
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 2. Clarinete -->
+                <article data-category="instrumentos" class="app-card bg-white rounded-3xl overflow-hidden shadow-card border border-gray-100 hover-card flex flex-col reveal">
+                    <div class="img-zoom-wrapper rounded-none h-48 relative">
+                        <img 
+                            src="https://images.unsplash.com/photo-1569791832138-fbdd9a500384?auto=format&fit=crop&w=700&q=80" 
+                            alt="Clarinete instrumento de sopro" 
+                            class="w-full h-full object-cover"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/B2F2BB/1E1E24?text=Clarinete';"
+                        >
+                        <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-pastelgreen text-pastelgreen-deep text-xs font-bold shadow">Tubo Fechado</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <span class="text-xs font-bold uppercase tracking-wider text-hotpink mb-1">Instrumento de Sopro</span>
+                        <h3 class="text-xl font-extrabold text-charcoal mb-3">Clarinete</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed flex-1">
+                            Embora a ponta inferior seja aberta, a boquilha possui uma <strong>palheta de madeira</strong> encostada nos lábios que fecha a entrada enquanto vibra. Por agir como tubo fechado, emite notas bem graves sem precisar ser gigante e ganha um timbre "aveludado" dos harmônicos ímpares.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 3. Órgão de Tubos -->
+                <article data-category="instrumentos" class="app-card bg-white rounded-3xl overflow-hidden shadow-card border border-gray-100 hover-card flex flex-col reveal">
+                    <div class="img-zoom-wrapper rounded-none h-48 relative">
+                        <img 
+                            src="https://images.unsplash.com/photo-1513883049090-d0b7439799bf?auto=format&fit=crop&w=700&q=80" 
+                            alt="Órgão de tubos clássico" 
+                            class="w-full h-full object-cover"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/FF007F/FFFFFF?text=Orgao+de+Tubos';"
+                        >
+                        <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-charcoal text-white text-xs font-bold shadow">Abertos &amp; Fechados</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <span class="text-xs font-bold uppercase tracking-wider text-pastelgreen-deep mb-1">Instrumento de Sopro</span>
+                        <h3 class="text-xl font-extrabold text-charcoal mb-3">Órgão de Tubos</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed flex-1">
+                            Uma coleção gigante de tubos de tamanhos fixos onde cada tubo toca uma nota. Construtores usam <strong>tubos abertos</strong> para notas brilhantes e <strong>tubos fechados (tampados)</strong> para economizar espaço nos graves, pois precisam de apenas metade da altura para dar o mesmo som grave.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 4. Nossa Voz (Trato Vocal) -->
+                <article data-category="cotidiano" class="app-card bg-white rounded-3xl overflow-hidden shadow-card border border-gray-100 hover-card flex flex-col reveal">
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-hotpink-soft text-hotpink flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                </svg>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-pastelgreen-soft text-pastelgreen-deep text-xs font-bold">Corpo Humano</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-charcoal mb-3">Na Nossa Voz (Trato Vocal)</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed flex-1">
+                            Nossa garganta e boca funcionam praticamente como um <strong>tubo fechado</strong>: as pregas vocais ficam embaixo (ponta fechada) vibrando e a boca aberta fica na outra ponta. Ao mexer a língua e os lábios para pronunciar "A", "E" ou "O", mudamos o formato do tubo e seus harmônicos.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 5. Caixas de Som (Duto Bass-Reflex) -->
+                <article data-category="cotidiano" class="app-card bg-white rounded-3xl overflow-hidden shadow-card border border-gray-100 hover-card flex flex-col reveal">
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-pastelgreen-soft text-pastelgreen-deep flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M9 12h.01M12 12h.01M15 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-hotpink-soft text-hotpink text-xs font-bold">Engenharia de Áudio</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-charcoal mb-3">Caixas de Som (Bass-Reflex)</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed flex-1">
+                            Aquele duto circular na frente ou atrás de muitas caixas de som é um <strong>tubo aberto</strong> calculado propositalmente para fazer o ar interno entrar em ressonância, reforçando e deixando as batidas graves da música muito mais potentes.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 6. Escapamentos de Carro -->
+                <article data-category="cotidiano" class="app-card bg-white rounded-3xl overflow-hidden shadow-card border border-gray-100 hover-card flex flex-col reveal">
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-hotpink-soft text-hotpink flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-pastelgreen-soft text-pastelgreen-deep text-xs font-bold">Automotivo</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-charcoal mb-3">Escapamentos de Carro</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed flex-1">
+                            O silenciador do escapamento utiliza câmaras baseadas em <strong>tubos fechados</strong> para gerar ondas estacionárias refletidas que batem de frente com as ondas sonoras do motor, provocando interferência destrutiva e cancelando o ruído.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 7. Medicina (Estetoscópio) -->
+                <article data-category="cotidiano" class="app-card bg-white rounded-3xl overflow-hidden shadow-card border border-gray-100 hover-card flex flex-col md:col-span-2 lg:col-span-3 reveal">
+                    <div class="p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-6 bg-gradient-to-r from-white via-white to-pastelgreen-soft/70">
+                        <div class="w-16 h-16 rounded-2xl bg-hotpink text-white flex items-center justify-center shrink-0 shadow-pink-glow">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-3 py-0.5 rounded-full bg-pastelgreen text-pastelgreen-deep text-xs font-extrabold uppercase">Medicina &amp; Saúde</span>
+                                <h3 class="text-xl sm:text-2xl font-extrabold text-charcoal">Estetoscópio Médico</h3>
+                            </div>
+                            <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
+                                Aquele tubo emborrachado que o médico utiliza para auscultar o coração e os pulmões funciona como um <strong>tubo condutor acústico</strong>, calibrado no comprimento e diâmetro ideais para ressoar e guiar as batidas cardíacas com nitidez direto até os ouvidos do profissional.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SEÇÃO 5: EXERCÍCIO RESOLVIDO (ESTILO ENEM / VESTIBULAR) ==================== -->
+    <section id="exercicio" class="py-20 bg-pastelgreen-soft/60 border-t border-pastelgreen/60">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-white text-hotpink font-bold text-xs uppercase tracking-widest shadow-sm mb-3">
+                    05 • Na Prática para Provas e ENEM
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-charcoal mb-3">
+                    Exemplo de <span class="title-highlight">Exercício Resolvido</span>
+                </h2>
+                <p class="text-gray-600 text-base sm:text-lg">
+                    Veja como aplicar as fórmulas de tubos sonoros em uma questão típica de prova.
+                </p>
+            </div>
+
+            <!-- Card do Exercício -->
+            <div class="bg-white rounded-3xl shadow-card border-2 border-pastelgreen overflow-hidden reveal">
+                <!-- Enunciado -->
+                <div class="p-6 sm:p-8 bg-charcoal text-white">
+                    <span class="inline-block px-3 py-1 rounded-lg bg-hotpink text-white text-xs font-extrabold uppercase tracking-wider mb-3">
+                        Enunciado da Questão
+                    </span>
+                    <p class="text-lg sm:text-xl font-medium leading-relaxed">
+                        Qual deve ser o comprimento de uma flauta (<span class="text-pastelgreen font-bold">tubo aberto</span>) para ela tocar a nota <span class="text-hotpink-light font-bold">Lá (440 Hz)</span> no seu <span class="text-pastelgreen font-bold">1º harmônico</span>? Considere a velocidade do som no ar igual a <span class="underline decoration-hotpink decoration-2">340 m/s</span>.
+                    </p>
+                </div>
+
+                <!-- Passo a Passo Interativo -->
+                <div class="p-6 sm:p-8 space-y-4">
+                    <h3 class="font-heading font-extrabold text-lg text-charcoal mb-4">Resolução Passo a Passo:</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Passo 1 -->
+                        <div class="p-4 rounded-2xl bg-icewhite border border-gray-200 flex items-start gap-3.5">
+                            <span class="w-8 h-8 rounded-xl bg-hotpink text-white font-heading font-extrabold flex items-center justify-center shrink-0">1</span>
+                            <div>
+                                <h4 class="font-bold text-charcoal text-sm">Separar os dados</h4>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    Frequência: <strong>f = 440 Hz</strong><br>
+                                    Velocidade: <strong>v = 340 m/s</strong><br>
+                                    Harmônico: <strong>n = 1</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Passo 2 -->
+                        <div class="p-4 rounded-2xl bg-icewhite border border-gray-200 flex items-start gap-3.5">
+                            <span class="w-8 h-8 rounded-xl bg-pastelgreen text-pastelgreen-deep font-heading font-extrabold flex items-center justify-center shrink-0">2</span>
+                            <div>
+                                <h4 class="font-bold text-charcoal text-sm">Escolher a fórmula (Tubo Aberto)</h4>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    f = n · v / (2L)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Passo 3 -->
+                        <div class="p-4 rounded-2xl bg-icewhite border border-gray-200 flex items-start gap-3.5">
+                            <span class="w-8 h-8 rounded-xl bg-hotpink text-white font-heading font-extrabold flex items-center justify-center shrink-0">3</span>
+                            <div>
+                                <h4 class="font-bold text-charcoal text-sm">Substituir e multiplicar cruzado</h4>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    440 = 1 · 340 / (2L)<br>
+                                    440 · 2L = 340 &nbsp;⇒&nbsp; <strong>880L = 340</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Passo 4 -->
+                        <div class="p-4 rounded-2xl bg-icewhite border border-gray-200 flex items-start gap-3.5">
+                            <span class="w-8 h-8 rounded-xl bg-pastelgreen text-pastelgreen-deep font-heading font-extrabold flex items-center justify-center shrink-0">4</span>
+                            <div>
+                                <h4 class="font-bold text-charcoal text-sm">Efetuar a divisão final</h4>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    L = 340 / 880 &nbsp;⇒&nbsp; <strong>L ≈ 0,386 metros</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resposta Destacada -->
+                    <div class="mt-6 p-5 rounded-2xl bg-pastelgreen border-2 border-pastelgreen-deep/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-pastelgreen-deep text-white flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-pastelgreen-deep block">Resposta Final</span>
+                                <p class="font-heading font-extrabold text-lg sm:text-xl text-charcoal">
+                                    A flauta precisa ter aproximadamente <span class="text-hotpink underline">38,6 cm</span> de comprimento.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SEÇÃO 6: CONCLUSÃO, EQUIPE & REFERÊNCIAS ==================== -->
+    <section id="conclusao" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <!-- Faixa de Destaque da Conclusão -->
+            <div class="rounded-3xl bg-gradient-to-br from-hotpink via-hotpink to-hotpink-dark text-white p-8 sm:p-12 shadow-pink-glow relative overflow-hidden reveal">
+                <div class="absolute -right-16 -bottom-16 w-72 h-72 rounded-full bg-pastelgreen/20 blur-2xl"></div>
+                <div class="relative z-10 max-w-4xl">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white font-bold text-xs uppercase tracking-widest mb-4">
+                        06 • Conclusão do Grupo
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mb-5 leading-tight">
+                        Da Teoria das Ondas para o Mundo Real
+                    </h2>
+                    <p class="text-white/95 text-base sm:text-lg leading-relaxed mb-4">
+                        Com a realização deste trabalho, nosso grupo compreendeu de verdade como a física das ondas está presente em coisas simples do dia a dia. Antes, ondas estacionárias pareciam apenas fórmulas teóricas para decorar para a prova; hoje, fica claro como o simples fato de uma ponta do tubo estar aberta ou fechada transforma completamente o som de um instrumento.
+                    </p>
+                    <p class="text-pastelgreen font-semibold text-base sm:text-lg">
+                        Esses mesmos princípios físicos permitem que engenheiros projetem caixas de som melhores, médicos auscultem o coração com o estetoscópio e que o nosso próprio corpo produza a voz ao falar ou cantar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Grid: Ficha Técnica / Alunos + Referências -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Ficha do Trabalho e Integrantes -->
+                <div class="lg:col-span-7 bg-white rounded-3xl p-8 shadow-card border border-pastelgreen reveal">
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-5 border-b border-gray-100 mb-6">
+                        <div>
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-hotpink">Identificação Acadêmica</span>
+                            <h3 class="text-2xl font-extrabold text-charcoal">Colégio CCM Erico Verissimo</h3>
+                        </div>
+                        <span class="px-4 py-1.5 rounded-xl bg-pastelgreen text-pastelgreen-deep font-heading font-bold text-sm">
+                            Turma: 2º Ano D
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-sm">
+                        <div class="p-3.5 rounded-xl bg-icewhite">
+                            <span class="text-gray-500 block text-xs font-bold uppercase">Disciplina</span>
+                            <span class="font-bold text-charcoal text-base">Física e Tecnologia</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-icewhite">
+                            <span class="text-gray-500 block text-xs font-bold uppercase">Professor Orientador</span>
+                            <span class="font-bold text-charcoal text-base">Prof. Cláudio</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-gray-500 block mb-3">Integrantes do Grupo 3</span>
+                        <div class="flex flex-wrap gap-2.5">
+                            <span class="px-4 py-2 rounded-xl bg-hotpink-soft text-hotpink-dark font-semibold text-sm">Antonella Rodrigues</span>
+                            <span class="px-4 py-2 rounded-xl bg-pastelgreen-soft text-pastelgreen-deep font-semibold text-sm">Ingrid Xavier</span>
+                            <span class="px-4 py-2 rounded-xl bg-hotpink-soft text-hotpink-dark font-semibold text-sm">Samara Figueiredo</span>
+                            <span class="px-4 py-2 rounded-xl bg-pastelgreen-soft text-pastelgreen-deep font-semibold text-sm">Sabrina Oracio</span>
+                            <span class="px-4 py-2 rounded-xl bg-hotpink-soft text-hotpink-dark font-semibold text-sm">Maria Fumegalli</span>
+                            <span class="px-4 py-2 rounded-xl bg-pastelgreen-soft text-pastelgreen-deep font-semibold text-sm">Lucas Soares</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referências Bibliográficas -->
+                <div class="lg:col-span-5 bg-white rounded-3xl p-8 shadow-card border border-gray-200/80 flex flex-col justify-between reveal">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-pastelgreen-deep">Fontes de Pesquisa</span>
+                        <h3 class="text-2xl font-extrabold text-charcoal mb-5">Referências</h3>
+                        <ul class="space-y-3.5 text-sm text-gray-600">
+                            <li class="pl-3.5 border-l-4 border-hotpink">
+                                <strong class="text-charcoal">HALLIDAY, David; RESNICK, Robert.</strong> <em>Fundamentos de Física - Volume 2: Gravitação, Ondas e Termodinâmica.</em> 9ª Edição. Editora LTC, 2012.
+                            </li>
+                            <li class="pl-3.5 border-l-4 border-pastelgreen">
+                                <strong class="text-charcoal">RAMALHO, Francisco; FERRARO, Nicolau; TOLEDO, Paulo.</strong> <em>Os Fundamentos da Física - Volume 2.</em> 10ª Edição. Editora Moderna, 2009.
+                            </li>
+                            <li class="pl-3.5 border-l-4 border-hotpink">
+                                <strong class="text-charcoal">MUNDO EDUCAÇÃO.</strong> <em>Tubos Sonoros.</em> Acesso em: 2026.
+                            </li>
+                            <li class="pl-3.5 border-l-4 border-pastelgreen">
+                                <strong class="text-charcoal">BRASIL ESCOLA.</strong> <em>Ondas Estacionárias em Tubos.</em> Acesso em: 2026.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-charcoal text-white py-10 border-t-4 border-hotpink">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-center sm:text-left">
+                <p class="font-heading font-extrabold text-lg">
+                    Tubos <span class="text-hotpink">Sonoros</span> • Estudo de Física
+                </p>
+                <p class="text-xs text-gray-400 mt-1">
+                    Trabalho Escrito — Grupo 3 • 2º Ano D • Colégio CCM Erico Verissimo
+                </p>
+            </div>
+
+            <a href="#inicio" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pastelgreen text-pastelgreen-deep hover:bg-hotpink hover:text-white font-heading font-bold text-sm transition-all">
+                Voltar ao Topo
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+                </svg>
+            </a>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT: ANIMAÇÕES, SIMULADOR E INTERATIVIDADE ==================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. MENU MOBILE RESPONSIVO
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIconOpen = document.getElementById('menuIconOpen');
+            const menuIconClose = document.getElementById('menuIconClose');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMobileMenu() {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                mobileMenu.classList.toggle('hidden', !isHidden);
+                menuIconOpen.classList.toggle('hidden', isHidden);
+                menuIconClose.classList.toggle('hidden', !isHidden);
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuIconOpen.classList.remove('hidden');
+                    menuIconClose.classList.add('hidden');
+                });
+            });
+
+            // 2. ANIMAÇÃO DE SCROLL REVEAL (IntersectionObserver)
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // 3. FILTRO DE APLICAÇÕES (Instrumentos vs Cotidiano)
+            const filterButtons = document.querySelectorAll('.app-filter-btn');
+            const appCards = document.querySelectorAll('.app-card');
+
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filter = btn.getAttribute('data-filter');
+
+                    // Atualiza estilo ativo dos botões
+                    filterButtons.forEach(b => {
+                        b.classList.remove('bg-hotpink', 'text-white', 'shadow-pink-glow');
+                        b.classList.add('bg-pastelgreen-soft', 'text-pastelgreen-deep');
+                    });
+                    btn.classList.remove('bg-pastelgreen-soft', 'text-pastelgreen-deep');
+                    btn.classList.add('bg-hotpink', 'text-white', 'shadow-pink-glow');
+
+                    // Filtra os cards suavemente
+                    appCards.forEach(card => {
+                        const category = card.getAttribute('data-category');
+                        if (filter === 'all' || category === filter) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // 4. SIMULADOR INTERATIVO DE ONDAS ESTACIONÁRIAS (CANVAS + WEB AUDIO API)
+            const canvas = document.getElementById('waveCanvas');
+            const ctx = canvas.getContext('2d');
+            const btnOpenTube = document.getElementById('btnOpenTube');
+            const btnClosedTube = document.getElementById('btnClosedTube');
+            const harmonicButtons = document.querySelectorAll('.harm-btn');
+            const harmonicRuleHint = document.getElementById('harmonicRuleHint');
+            const tubeLengthSlider = document.getElementById('tubeLengthSlider');
+            const tubeLengthValue = document.getElementById('tubeLengthValue');
+            const tubeEndLabels = document.getElementById('tubeEndLabels');
+            const calcLambda = document.getElementById('calcLambda');
+            const calcFreq = document.getElementById('calcFreq');
+            const calcNodesAntinodes = document.getElementById('calcNodesAntinodes');
+            const playToneBtn = document.getElementById('playToneBtn');
+            const playToneText = document.getElementById('playToneText');
+            const audioFeedbackMsg = document.getElementById('audioFeedbackMsg');
+
+            const SOUND_SPEED = 340; // v = 340 m/s
+            let tubeType = 'open'; // 'open' ou 'closed'
+            let currentN = 1;
+            let currentL = 0.50;
+            let phase = 0;
+
+            // Ajusta resolução do Canvas para telas Retina / Responsivo
+            function resizeCanvas() {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // Atualiza cálculos físicos e interface
+            function updatePhysicsUI() {
+                let lambda, freq, nodesCount, antinodesCount;
+
+                if (tubeType === 'open') {
+                    lambda = (2 * currentL) / currentN;
+                    freq = currentN * (SOUND_SPEED / (2 * currentL));
+                    nodesCount = currentN;
+                    antinodesCount = currentN + 1;
+                    tubeEndLabels.textContent = 'Ponta Esquerda: Aberta (Ventre) | Ponta Direita: Aberta (Ventre)';
+                } else {
+                    lambda = (4 * currentL) / currentN;
+                    freq = currentN * (SOUND_SPEED / (4 * currentL));
+                    const k = (currentN - 1) / 2;
+                    nodesCount = k + 1;
+                    antinodesCount = k + 1;
+                    tubeEndLabels.textContent = 'Ponta Esquerda: Fechada (Nó) | Ponta Direita: Aberta (Ventre)';
+                }
+
+                tubeLengthValue.textContent = currentL.toFixed(2).replace('.', ',') + ' m';
+                calcLambda.textContent = lambda.toFixed(2).replace('.', ',') + ' m';
+                calcFreq.textContent = freq.toFixed(1).replace('.', ',') + ' Hz';
+                calcNodesAntinodes.textContent = `${nodesCount} ${nodesCount === 1 ? 'Nó' : 'Nós'} e ${antinodesCount} ${antinodesCount === 1 ? 'Ventre' : 'Ventres'}`;
+
+                // Atualiza estilo dos botões de harmônico
+                harmonicButtons.forEach(btn => {
+                    const nVal = parseInt(btn.getAttribute('data-n'), 10);
+                    const isEven = nVal % 2 === 0;
+
+                    if (tubeType === 'closed' && isEven) {
+                        btn.disabled = true;
+                        btn.className = 'harm-btn flex-1 py-2.5 rounded-xl font-heading font-extrabold text-sm bg-gray-100 text-gray-300 cursor-not-allowed line-through';
+                    } else {
+                        btn.disabled = false;
+                        if (nVal === currentN) {
+                            btn.className = 'harm-btn flex-1 py-2.5 rounded-xl font-heading font-extrabold text-sm bg-pastelgreen text-pastelgreen-deep ring-2 ring-pastelgreen-deep transition-all';
+                        } else {
+                            btn.className = 'harm-btn flex-1 py-2.5 rounded-xl font-heading font-extrabold text-sm bg-white text-charcoal border border-gray-200 hover:border-hotpink transition-all';
+                        }
+                    }
+                });
+            }
+
+            // Alternar para Tubo Aberto
+            btnOpenTube.addEventListener('click', () => {
+                tubeType = 'open';
+                btnOpenTube.className = 'py-2.5 px-3 rounded-xl font-heading font-bold text-sm bg-hotpink text-white shadow-pink-glow transition-all';
+                btnClosedTube.className = 'py-2.5 px-3 rounded-xl font-heading font-bold text-sm bg-white text-charcoal border border-gray-200 hover:border-hotpink transition-all';
+                harmonicRuleHint.textContent = '(todos: 1, 2, 3, 4, 5)';
+                updatePhysicsUI();
+            });
+
+            // Alternar para Tubo Fechado
+            btnClosedTube.addEventListener('click', () => {
+                tubeType = 'closed';
+                btnClosedTube.className = 'py-2.5 px-3 rounded-xl font-heading font-bold text-sm bg-hotpink text-white shadow-pink-glow transition-all';
+                btnOpenTube.className = 'py-2.5 px-3 rounded-xl font-heading font-bold text-sm bg-white text-charcoal border border-gray-200 hover:border-hotpink transition-all';
+                harmonicRuleHint.textContent = '(apenas ímpares: 1, 3, 5)';
+
+                // Se estiver num harmônico par, volta para o ímpar mais próximo
+                if (currentN % 2 === 0) {
+                    currentN = currentN - 1;
+                }
+                updatePhysicsUI();
+            });
+
+            // Seleção de Harmônico
+            harmonicButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.disabled) return;
+                    currentN = parseInt(btn.getAttribute('data-n'), 10);
+                    updatePhysicsUI();
+                });
+            });
+
+            // Slider de Comprimento L
+            tubeLengthSlider.addEventListener('input', (e) => {
+                currentL = parseFloat(e.target.value);
+                updatePhysicsUI();
+            });
+
+            // Loop de Animação da Onda Estacionária no Canvas
+            function drawStandingWave() {
+                const width = canvas.width / (window.devicePixelRatio || 1);
+                const height = canvas.height / (window.devicePixelRatio || 1);
+
+                ctx.clearRect(0, 0, width, height);
+
+                const padX = Math.max(24, width * 0.06);
+                const tubeWidth = width - padX * 2;
+                const tubeHeight = Math.min(130, height * 0.62);
+                const centerY = height / 2;
+                const topY = centerY - tubeHeight / 2;
+                const bottomY = centerY + tubeHeight / 2;
+
+                // Fundo interno do tubo
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+                ctx.fillRect(padX, topY, tubeWidth, tubeHeight);
+
+                // Linha central de equilíbrio
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                ctx.setLineDash([6, 6]);
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(padX, centerY);
+                ctx.lineTo(padX + tubeWidth, centerY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Paredes superior e inferior do tubo
+                ctx.strokeStyle = '#B2F2BB';
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(padX, topY);
+                ctx.lineTo(padX + tubeWidth, topY);
+                ctx.moveTo(padX, bottomY);
+                ctx.lineTo(padX + tubeWidth, bottomY);
+                ctx.stroke();
+
+                // Se for Tubo Fechado, desenha a parede fechada à esquerda
+                if (tubeType === 'closed') {
+                    ctx.strokeStyle = '#FF007F';
+                    ctx.lineWidth = 6;
+                    ctx.beginPath();
+                    ctx.moveTo(padX, topY - 2);
+                    ctx.lineTo(padX, bottomY + 2);
+                    ctx.stroke();
+                }
+
+                // Cálculo da amplitude oscilante
+                const maxAmp = (tubeHeight / 2) - 12;
+                const timeFactor = Math.cos(phase);
+
+                // Desenha envelope superior e inferior da onda estacionária
+                function plotWave(multiplier, color, lineWidth) {
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWidth;
+                    ctx.beginPath();
+                    const steps = 200;
+                    for (let i = 0; i <= steps; i++) {
+                        const u = i / steps; // 0 a 1
+                        const x = padX + u * tubeWidth;
+                        let spatial;
+                        if (tubeType === 'open') {
+                            // Ventre nas duas pontas: cos(n * pi * u)
+                            spatial = Math.cos(currentN * Math.PI * u);
+                        } else {
+                            // Nó em u=0, Ventre em u=1: sin((n * pi / 2) * u)
+                            spatial = Math.sin((currentN * Math.PI / 2) * u);
+                        }
+                        const y = centerY + multiplier * maxAmp * spatial * timeFactor;
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+
+                // Onda principal e onda refletida (espelhada)
+                plotWave(1, '#FF007F', 3.5);
+                plotWave(-1, 'rgba(178, 242, 187, 0.85)', 2.5);
+
+                // Marca os Pontos de Nó (Rosa Choque)
+                ctx.fillStyle = '#FF007F';
+                if (tubeType === 'open') {
+                    for (let k = 0; k < currentN; k++) {
+                        const uNode = (2 * k + 1) / (2 * currentN);
+                        const nx = padX + uNode * tubeWidth;
+                        ctx.beginPath();
+                        ctx.arc(nx, centerY, 6, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.strokeStyle = '#FFFFFF';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    }
+                } else {
+                    const numNodes = (currentN + 1) / 2;
+                    for (let k = 0; k < numNodes; k++) {
+                        const uNode = (2 * k) / currentN;
+                        const nx = padX + uNode * tubeWidth;
+                        ctx.beginPath();
+                        ctx.arc(nx, centerY, 6, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.strokeStyle = '#FFFFFF';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    }
+                }
+
+                phase += 0.08;
+                requestAnimationFrame(drawStandingWave);
+            }
+
+            // Síntese Sonora Segura via Web Audio API (sem URLs externas)
+            let audioCtx = null;
+            playToneBtn.addEventListener('click', () => {
+                try {
+                    if (!audioCtx) {
+                        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                        audioCtx = new AudioContextClass();
+                    }
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+
+                    const freq = tubeType === 'open'
+                        ? currentN * (SOUND_SPEED / (2 * currentL))
+                        : currentN * (SOUND_SPEED / (4 * currentL));
+
+                    // Limita frequência audível confortável entre 110Hz e 2200Hz
+                    const safeFreq = Math.min(Math.max(freq, 110), 2200);
+
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = tubeType === 'open' ? 'sine' : 'triangle';
+                    osc.frequency.setValueAtTime(safeFreq, audioCtx.currentTime);
+
+                    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.4);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 1.45);
+
+                    playToneText.textContent = `Tocando ${safeFreq.toFixed(0)} Hz...`;
+                    audioFeedbackMsg.textContent = `Som sintetizado em ${safeFreq.toFixed(1)} Hz (${tubeType === 'open' ? 'Tubo Aberto' : 'Tubo Fechado - 1 oitava mais grave para o mesmo L'}).`;
+                    audioFeedbackMsg.classList.remove('hidden');
+
+                    setTimeout(() => {
+                        playToneText.textContent = 'Ouvir Nota (1,5s)';
+                    }, 1450);
+                } catch (err) {
+                    audioFeedbackMsg.textContent = 'Não foi possível reproduzir o áudio neste navegador, mas a visualização continua ativa.';
+                    audioFeedbackMsg.classList.remove('hidden');
+                }
+            });
+
+            // Inicializa UI e inicia animação
+            updatePhysicsUI();
+            drawStandingWave();
+        });
+    </script>
+</body>
+</html>
